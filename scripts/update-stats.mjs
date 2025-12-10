@@ -4,8 +4,9 @@
 import fs from "node:fs/promises";
 import dotenv from "dotenv";
 
+// Carica variabili d'ambiente se i file esistono, altrimenti usa process.env esistente
 dotenv.config({ path: ".env.local" });
-dotenv.config(); // Fallback to .env
+dotenv.config();
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
 const QUERY = "ingeimaks"; // handle/canale da cercare

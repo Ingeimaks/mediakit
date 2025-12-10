@@ -1,6 +1,7 @@
 
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
+dotenv.config();
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
 
