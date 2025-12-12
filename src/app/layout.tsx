@@ -19,9 +19,11 @@ export const metadata: Metadata = {
     "MediaKit professionale di Giovanni Mannara, creatore di INGEIMAKS: bio, progetti, contatti e assets.",
   metadataBase: new URL("https://giovanni-mannara-mediakit.local"),
   icons: {
-    icon: "/mediakit/100x100.ico",
+    icon: process.env.NODE_ENV === "production" ? "/mediakit/100x100.ico" : "/100x100.ico",
   },
 };
+
+import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 
 export default function RootLayout({
   children,
@@ -32,7 +34,9 @@ export default function RootLayout({
     <html lang="it" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <LanguageProvider>
+            {children}
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

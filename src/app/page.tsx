@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 
 import { stats } from "@/data/stats";
-import { cn } from "@/lib/utils";
+import { cn, getAssetPath } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -34,7 +34,6 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ModeToggle } from "@/components/mode-toggle";
-import { DownloadPdfButton } from "@/components/site/DownloadPdfButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Table,
@@ -53,6 +52,13 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 // Helper per formattare i numeri
 function formatNumber(num: number): string {
@@ -84,16 +90,17 @@ export default function MediaKitPage() {
   const [activeSection, setActiveSection] = React.useState("");
   const [showScrollTop, setShowScrollTop] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const { t, language, setLanguage } = useLanguage();
 
   // Chart Data
   const chartData = React.useMemo(() => [
-    { type: "reels", category: "Reels (<90s)", duration: stats.avgDurationReels, fill: "var(--color-reels)" },
-    { type: "video", category: "Video (>90s)", duration: stats.avgDurationVideos, fill: "var(--color-video)" },
-  ], []);
+    { type: "reels", category: t.stats.reels, duration: stats.avgDurationReels, fill: "var(--primary)" },
+    { type: "video", category: t.stats.video, duration: stats.avgDurationVideos, fill: "var(--muted-foreground)" },
+  ], [t]);
 
   const chartConfig = React.useMemo(() => ({
-    reels: { label: "Reels", color: "hsl(var(--chart-1))" },
-    video: { label: "Video", color: "hsl(var(--chart-2))" },
+    reels: { label: "Reels", color: "var(--primary)" },
+    video: { label: "Video", color: "var(--muted-foreground)" },
   }) satisfies ChartConfig, []);
 
   React.useEffect(() => {
@@ -144,10 +151,12 @@ export default function MediaKitPage() {
           <Link href="/" className="flex items-center gap-2 group" onClick={scrollToTop}>
             <div className="relative h-10 w-10 md:h-12 md:w-12 overflow-hidden rounded-full border border-border shadow-sm">
               <Image 
-                src="/mediakit/logoFinito2.png" 
+                src={getAssetPath("logoFinito2.png")} 
                 alt="Logo Ingeimaks" 
                 fill 
                 className="object-cover"
+                unoptimized
+                priority
                 onError={() => {
                   // Fallback to avatar if logo.png is missing
                 }}
@@ -160,20 +169,21 @@ export default function MediaKitPage() {
 
           
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-            {["About", "Numeri", "Portfolio", "Servizi", "Contatti"].map(
-              (item) => {
-                const lowerItem = item.toLowerCase();
+            {[t.header.about, t.header.numbers, t.header.projects, t.header.contact].map(
+              (item, idx) => {
+                const sectionIds = ["about", "numeri", "portfolio", "contatti"];
+                const sectionId = sectionIds[idx];
                 return (
                   <Link
-                    key={item}
-                    href={`#${lowerItem}`}
+                    key={sectionId}
+                    href={`#${sectionId}`}
                     className={cn(
                       "relative transition-colors hover:text-primary",
-                      activeSection === lowerItem ? "text-primary font-bold" : "text-muted-foreground"
+                      activeSection === sectionId ? "text-primary font-bold" : "text-muted-foreground"
                     )}
                   >
                     {item}
-                    {activeSection === lowerItem && (
+                    {activeSection === sectionId && (
                       <motion.div
                         layoutId="activeSection"
                         className="absolute -bottom-[21px] left-0 right-0 h-[2px] bg-primary"
@@ -187,8 +197,23 @@ export default function MediaKitPage() {
           </nav>
 
           <div className="flex items-center gap-3">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Globe className="h-[1.2rem] w-[1.2rem]" />
+                  <span className="sr-only">{t.common.language}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setLanguage("it")} className={language === "it" ? "bg-accent" : ""}>
+                  🇮🇹 Italiano
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLanguage("en")} className={language === "en" ? "bg-accent" : ""}>
+                  🇬🇧 English
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <ModeToggle />
-            <DownloadPdfButton className="hidden md:flex" />
 
             
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -202,19 +227,22 @@ export default function MediaKitPage() {
                   <SheetTitle>Menu</SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col gap-8 mt-10 items-center text-center">
-                  {["About", "Numeri", "Portfolio", "Servizi", "Contatti"].map(
-                    (item) => (
-                      <Link
-                        key={item}
-                        href={`#${item.toLowerCase()}`}
-                        className="text-xl font-medium hover:text-primary transition-colors py-2 w-full"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {item}
-                      </Link>
-                    )
+                  {[t.header.about, t.header.numbers, t.header.projects, t.header.contact].map(
+                    (item, idx) => {
+                      const sectionIds = ["about", "numeri", "portfolio", "contatti"];
+                      const sectionId = sectionIds[idx];
+                      return (
+                        <Link
+                          key={sectionId}
+                          href={`#${sectionId}`}
+                          className="text-xl font-medium hover:text-primary transition-colors py-2 w-full"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {item}
+                        </Link>
+                      );
+                    }
                   )}
-                  <DownloadPdfButton className="w-full flex md:hidden mt-4" />
                 </div>
               </SheetContent>
             </Sheet>
@@ -280,7 +308,11 @@ export default function MediaKitPage() {
             <div className="absolute -inset-1 rounded-full bg-black blur-md opacity-50"></div>
             <Avatar className="h-32 w-32 md:h-48 md:w-48 border-4 border-background relative shadow-2xl">
               <AvatarImage
-                src={stats.avatarUrl || "https://yt3.googleusercontent.com/ytc/AIdro_k2e9wWwW9wW9wW9wW9wW9wW9wW9wW9wW9w=s900-c-k-c0x00ffffff-no-rj"}
+                src={
+                  stats.avatarUrl.startsWith("http") 
+                    ? stats.avatarUrl 
+                    : getAssetPath(stats.avatarUrl)
+                }
                 alt="Giovanni Mannara"
                 className="object-cover"
               />
@@ -298,7 +330,7 @@ export default function MediaKitPage() {
           >
             <motion.h1
               variants={fadeInUp}
-              className="text-5xl md:text-7xl font-extrabold tracking-tighter bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent bg-300% animate-gradient"
+              className="text-5xl md:text-7xl font-extrabold tracking-tighter bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent bg-300% animate-gradient pb-2"
             >
               Giovanni Mannara
             </motion.h1>
@@ -306,7 +338,7 @@ export default function MediaKitPage() {
               variants={fadeInUp}
               className="text-xl md:text-3xl text-muted-foreground font-light"
             >
-              Tech Content Creator & Maker •{" "}
+              {t.hero.role} •{" "}
               <span className="text-primary font-semibold">Ingeimaks</span>
             </motion.p>
           </motion.div>
@@ -317,7 +349,7 @@ export default function MediaKitPage() {
             transition={{ delay: 0.5, duration: 0.6 }}
             className="flex flex-wrap justify-center gap-3"
           >
-            {["Electronics", "Programming", "DIY Projects", "Tech Reviews"].map(
+            {[t.tags.electronics, t.tags.programming, t.tags.diy, t.tags.techReviews].map(
               (tag) => (
                 <Badge
                   key={tag}
@@ -341,7 +373,7 @@ export default function MediaKitPage() {
               size="lg"
               className="rounded-full text-lg h-12 px-8 shadow-lg shadow-primary/25 hover:shadow-primary/50 transition-all hover:-translate-y-1"
             >
-              <Link href="mailto:info@ingeimaks.it">Collabora con me</Link>
+              <Link href="mailto:info@ingeimaks.it">{t.common.contactMe}</Link>
             </Button>
             <Button
               asChild
@@ -351,7 +383,7 @@ export default function MediaKitPage() {
             >
               <Link href="https://youtube.com/ingeimaks" target="_blank">
                 <Youtube className="mr-2 h-5 w-5 text-red-600" />
-                Canale YouTube
+                {t.common.youtubeChannel}
               </Link>
             </Button>
           </motion.div>
@@ -369,17 +401,10 @@ export default function MediaKitPage() {
           <div className="space-y-8 z-10">
             <div className="space-y-4">
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight border-l-4 border-primary pl-4">
-                Chi è Ingeimaks?
+                {t.header.about}
               </h2>
               <p className="text-muted-foreground text-lg leading-relaxed">
-                Sono Giovanni Mannara, un ingegnere e maker appassionato di
-                tecnologia. Su YouTube condivido la mia passione per
-                l&apos;elettronica, la programmazione e il fai-da-te tecnologico.
-              </p>
-              <p className="text-muted-foreground text-lg leading-relaxed">
-                Il mio obiettivo è rendere la tecnologia accessibile a tutti,
-                spiegando concetti complessi in modo semplice e divertente, e
-                ispirando la mia community a costruire i propri progetti.
+                {t.hero.description}
               </p>
             </div>
 
@@ -393,18 +418,18 @@ export default function MediaKitPage() {
                 <CardContent>
                   <div className="flex items-center gap-2">
                     <Globe className="h-5 w-5 text-primary" />
-                    <span className="font-bold text-lg">Italia 🇮🇹</span>
+                    <span className="font-bold text-lg">{t.common.italy}</span>
                   </div>
                 </CardContent>
               </Card>
               <Card className="hover:border-primary/50 transition-colors">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
-                    Lingua
+                    {t.common.language}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="font-bold text-lg">Italiano</div>
+                  <div className="font-bold text-lg">{t.common.italian}</div>
                 </CardContent>
               </Card>
             </div>
@@ -413,13 +438,13 @@ export default function MediaKitPage() {
           <div className="bg-gradient-to-br from-muted/50 to-muted rounded-2xl p-8 border border-border/50 shadow-inner flex flex-col justify-center space-y-6 relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full group-hover:scale-110 transition-transform duration-500" />
             
-            <h3 className="text-2xl font-bold">Perché collaborare?</h3>
+            <h3 className="text-2xl font-bold">{t.services.title}</h3>
             <ul className="space-y-4">
               {[
-                "Pubblico altamente profilato e appassionato",
-                "Contenuti di alta qualità tecnica e visiva",
-                "Credibilità e fiducia costruita negli anni",
-                "Approccio creativo al brand placement",
+                t.services.review.title,
+                t.services.tutorial.title,
+                t.services.sponsored.title,
+                t.services.social.title,
               ].map((item, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <CheckCircle2 className="h-6 w-6 text-primary shrink-0" />
@@ -441,68 +466,68 @@ export default function MediaKitPage() {
         >
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
-              I Numeri del Canale YouTube
+              {t.stats.title}
             </h2>
             <p className="text-muted-foreground text-lg">
-              Dati aggiornati e verificati (YouTube Data API)
+              {t.stats.verifiedData}
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                label: "Iscritti",
+                label: t.common.subscribers,
                 value: stats.subscribers,
                 icon: Users,
-                desc: "Community fedele",
+                desc: t.audience.subtitle,
                 color: "text-blue-500",
               },
               {
-                label: "Visualizzazioni Totali",
+                label: t.hero.stat2,
                 value: stats.totalViews,
                 icon: Play,
-                desc: "Lifetime views",
+                desc: t.stats.lifetimeViews,
                 color: "text-red-500",
               },
               {
-                label: "Media Views / Video",
+                label: t.stats.avgViews,
                 value: stats.avgViewsPerVideo,
                 icon: MonitorPlay,
-                desc: `Su ${stats.videoCount} video`,
+                desc: t.stats.onVideoCount.replace("{count}", stats.videoCount.toString()),
                 color: "text-green-500",
               },
               {
-                label: "Engagement Rate",
+                label: t.common.engagement,
                 value: stats.engagementRatePct,
                 suffix: "%",
                 icon: TrendingUp,
-                desc: "Alta interazione",
+                desc: t.stats.highInteraction,
                 color: "text-purple-500",
               },
               {
-                label: "Durata Media",
+                label: t.common.avgDuration,
                 value: stats.avgDurationMinutes,
-                suffix: " min",
+                suffix: ` ${t.common.minutes}`,
                 icon: Clock,
-                desc: "Formato approfondito",
+                desc: t.stats.deepDiveFormat,
                 color: "text-orange-500",
               },
               {
-                label: "Views Recenti",
+                label: t.stats.recentAvgViews,
                 value: stats.recentAvgViews,
                 icon: Zap,
-                desc: "Ultimi 10 video",
+                desc: t.stats.last10Videos,
                 color: "text-yellow-500",
-            },
-            {
-              label: "Frequenza Upload",
-              value: stats.uploadsPerMonth,
-              suffix: " /mese",
-              icon: Calendar,
-              desc: "Costanza pubblicazione",
-              color: "text-cyan-500",
-            },
-          ].map((stat, idx) => (
+              },
+              {
+                label: t.stats.uploadsPerMonth,
+                value: stats.uploadsPerMonth,
+                suffix: " /" + t.common.month,
+                icon: Calendar,
+                desc: t.stats.consistentUploads,
+                color: "text-cyan-500",
+              },
+            ].map((stat, idx) => (
               <motion.div
                 key={idx}
                 variants={fadeInUp}
@@ -535,10 +560,10 @@ export default function MediaKitPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5 text-primary" />
-                  Durata Media Contenuti
+                  {t.stats.durationContent}
                 </CardTitle>
                 <CardDescription>
-                  Confronto tra formati brevi (Reels) e lunghi (Video) - Precisione al secondo
+                  {t.stats.durationDesc}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -562,7 +587,7 @@ export default function MediaKitPage() {
                       cursor={false}
                       content={<ChartTooltipContent hideLabel />}
                     />
-                    <Bar dataKey="duration" layout="vertical" radius={5}>
+                    <Bar dataKey="duration" layout="vertical" radius={5} barSize={60}>
                       <LabelList
                         dataKey="duration"
                         position="right"
@@ -594,19 +619,19 @@ export default function MediaKitPage() {
         >
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-              Ecosistema Digitale
+              {t.social.title}
             </h2>
             <p className="text-muted-foreground text-lg">
-              Oltre YouTube: una community attiva su più fronti
+              {t.social.subtitle}
             </p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {stats.socials && Object.entries(stats.socials).map(([key, social]) => {
-               const logoPath = `/mediakit/socials/${key}.svg`;
+               const logoPath = getAssetPath(`socials/${key}.svg`);
                
                const count = social.followers || social.subscribers || 0;
-               const label = social.followers ? "Follower" : social.subscribers ? "Iscritti" : "Community";
+               const label = social.followers ? t.common.followers : social.subscribers ? t.common.subscribers : t.common.community;
                
                // Colori per le ombre (rimossi bordi colorati)
                const shadowClass = 
@@ -629,7 +654,11 @@ export default function MediaKitPage() {
                       src={logoPath}
                       alt={social.label}
                       fill
-                      className="object-contain"
+                      unoptimized
+                      className={cn(
+                        "object-contain",
+                        key === 'tiktok' && "dark:invert"
+                      )}
                     />
                   </div>
                   
@@ -640,7 +669,7 @@ export default function MediaKitPage() {
                         {formatNumber(count)} {label}
                       </div>
                     ) : (
-                      <div className="text-xs text-muted-foreground opacity-70">Unisciti ora</div>
+                      <div className="text-xs text-muted-foreground opacity-70 group-hover:text-primary group-hover:opacity-100 transition-colors">{t.common.joinNow}</div>
                     )}
                   </div>
                 </Link>
@@ -660,15 +689,15 @@ export default function MediaKitPage() {
             <Card className="h-full">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-2xl">
-                  <Users className="h-6 w-6 text-primary" /> Demografica
+                  <Users className="h-6 w-6 text-primary" /> {t.audience.demographics}
                 </CardTitle>
-                <CardDescription>Chi guarda i miei video</CardDescription>
+                <CardDescription>{t.audience.whoWatches}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-8">
                 {[
-                  { label: "Uomini", val: 94, color: "bg-blue-500" },
-                  { label: "Età 18-34", val: 65, color: "bg-primary" },
-                  { label: "Interesse Tech/Maker", val: 100, color: "bg-green-500" },
+                  { label: t.audience.male, val: 94, color: "bg-blue-500" },
+                  { label: `${t.audience.age} 18-34`, val: 65, color: "bg-primary" },
+                  { label: t.audience.interests, val: 100, color: "bg-green-500" },
                 ].map((item, i) => (
                   <div key={i} className="space-y-2">
                     <div className="flex justify-between text-sm font-medium">
@@ -699,23 +728,23 @@ export default function MediaKitPage() {
             <Card className="h-full">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-2xl">
-                  <Globe className="h-6 w-6 text-primary" /> Geografia
+                  <Globe className="h-6 w-6 text-primary" /> {t.audience.geoDistribution}
                 </CardTitle>
-                <CardDescription>Provenienza del traffico</CardDescription>
+                <CardDescription>{t.audience.trafficSource}</CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Paese</TableHead>
+                      <TableHead>{t.audience.country}</TableHead>
                       <TableHead className="text-right">%</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {[
-                      { c: "Italia 🇮🇹", p: "92%" },
-                      { c: "Svizzera 🇨🇭", p: "3%" },
-                      { c: "Altro 🌍", p: "5%" },
+                      { c: t.common.italy, p: "92%" },
+                      { c: t.common.switzerland, p: "3%" },
+                      { c: t.common.other, p: "5%" },
                     ].map((row, i) => (
                       <TableRow key={i} className="hover:bg-muted/50">
                         <TableCell className="font-medium text-lg">
@@ -737,11 +766,11 @@ export default function MediaKitPage() {
         <section id="portfolio" className="space-y-12 px-6 md:px-12">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-              Top Videos
+              {t.portfolio.title}
             </h2>
-            <Button variant="ghost" className="group" asChild>
+            <Button variant="outline" className="group" asChild>
               <Link href="https://youtube.com/ingeimaks" target="_blank">
-                Vedi tutti{" "}
+                {t.portfolio.viewAll}{" "}
                 <ExternalLink className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
@@ -764,6 +793,8 @@ export default function MediaKitPage() {
                       }/hqdefault.jpg`}
                       alt={video.title}
                       fill
+                      unoptimized
+                      priority
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -783,7 +814,7 @@ export default function MediaKitPage() {
                   <CardFooter className="p-5 pt-auto mt-auto">
                     <Button variant="outline" className="w-full group/btn" asChild>
                       <Link href={video.url} target="_blank">
-                        Guarda su YouTube
+                        {t.portfolio.watchOnYoutube}
                         <ExternalLink className="ml-2 h-3 w-3 opacity-50 group-hover/btn:opacity-100 transition-opacity" />
                       </Link>
                     </Button>
@@ -805,10 +836,10 @@ export default function MediaKitPage() {
         >
           <div className="text-center space-y-4">
              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-               Brand che si fidano
+               {t.brands.title}
              </h2>
              <p className="text-muted-foreground text-lg">
-               Alcune delle aziende con cui ho collaborato
+               {t.brands.subtitle}
              </p>
           </div>
           
@@ -837,9 +868,11 @@ export default function MediaKitPage() {
               >
                 <div className="relative h-12 w-full md:h-14">
                   <Image
-                    src={`/mediakit/brands/${brand.name.toLowerCase().replace(/\s+/g, '-')}.png`}
+                    src={getAssetPath(`brands/${brand.name.toLowerCase().replace(/\s+/g, '-')}.png`)}
                     alt={brand.name}
                     fill
+                    unoptimized
+                    priority
                     className="object-contain transition-all duration-500"
                     onError={(e) => {
                       const target = e.currentTarget as HTMLImageElement;
@@ -870,27 +903,27 @@ export default function MediaKitPage() {
 
           <div className="text-center space-y-4 mb-12">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-              Servizi & Collaborazioni
+              {t.services.title}
             </h2>
             <p className="text-muted-foreground text-lg">
-              Come possiamo lavorare insieme
+              {t.services.subtitle}
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                title: "Video Dedicato",
-                desc: "Un intero video dedicato al tuo prodotto o servizio. Ideale per tutorial complessi e recensioni approfondite.",
+                title: t.services.review.title,
+                desc: t.services.review.desc,
               },
               {
-                title: "Integrazione (Mid-roll)",
-                desc: "Una menzione organica di 60-90 secondi. Il modo più efficace per raggiungere l'audience senza interrompere il flusso.",
+                title: t.services.sponsored.title,
+                desc: t.services.sponsored.desc,
                 highlight: true,
               },
               {
-                title: "YouTube Shorts",
-                desc: "Video brevi, dinamici e ad alto impatto virale. Perfetti per mostrare funzionalità 'wow' del prodotto.",
+                title: t.services.shorts.title,
+                desc: t.services.shorts.desc,
               },
             ].map((service, idx) => (
               <Card
@@ -929,13 +962,11 @@ export default function MediaKitPage() {
           className="py-20 text-center space-y-8 px-6 md:px-12"
         >
           <div className="space-y-4">
-            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent bg-300% animate-gradient">
-              Parliamo del tuo progetto
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent bg-300% animate-gradient pb-2">
+              {t.contact.title}
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto text-lg">
-              Sono sempre alla ricerca di partner che condividano la mia passione
-              per l&apos;innovazione. Contattami per richiedere il listino prezzi o
-              discutere un&apos;idea.
+              {t.contact.subtitle}
             </p>
           </div>
 
@@ -947,7 +978,7 @@ export default function MediaKitPage() {
             >
               <Link href="mailto:info@ingeimaks.it">
                 <Mail className="h-6 w-6" />
-                Scrivimi una Email
+                {t.contact.emailButton}
               </Link>
             </Button>
             <p className="text-xl font-medium text-foreground tracking-wide selection:bg-primary selection:text-primary-foreground">
@@ -960,15 +991,14 @@ export default function MediaKitPage() {
       <footer className="py-12 border-t bg-muted/30 text-center text-sm text-muted-foreground">
         <div className="w-full px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-4">
           <p>
-            © {new Date().getFullYear()} Giovanni Mannara (Ingeimaks). Tutti i
-            diritti riservati.
+            © {new Date().getFullYear()} Giovanni Mannara (Ingeimaks). {t.footer.rights}.
           </p>
           <div className="flex gap-6">
             <Link href="/privacy" className="hover:text-primary transition-colors">
-              Privacy Policy
+              {t.footer.privacy}
             </Link>
             <Link href="/termini" className="hover:text-primary transition-colors">
-              Termini e Condizioni
+              {t.footer.terms}
             </Link>
           </div>
         </div>

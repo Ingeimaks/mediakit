@@ -76,7 +76,7 @@ export const stats: ChannelStats = {
       "views": 6707
     }
   ],
-  "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_mLbavdK-jYX6Q-PKeU4nIcEOqMrFlHX7MA-XSkia9rEKQ=s800-c-k-c0x00ffffff-no-rj",
+  "avatarUrl": "/images/avatar.jpg",
   "socials": {
     "instagram": {
       "label": "Instagram",

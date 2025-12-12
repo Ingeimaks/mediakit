@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   output: "export",
   images: { unoptimized: true },
-  basePath: `/${repoName}`,
+  basePath: process.env.NODE_ENV === "production" ? `/${repoName}` : undefined,
   ...(process.env.NODE_ENV === "production"
     ? {
         assetPrefix: `/${repoName}/`,

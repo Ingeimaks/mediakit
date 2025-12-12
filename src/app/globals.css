@@ -129,16 +129,27 @@
 
 
 @media print {
-  
-  header, footer, button, .no-print, [data-slot="dialog-overlay"], [data-slot="sheet-overlay"], [data-slot="sheet-content"] {
+  @page {
+    margin: 1cm;
+    size: auto;
+  }
+
+  header, footer, .no-print, [data-slot="dialog-overlay"], [data-slot="sheet-overlay"], [data-slot="sheet-content"] {
     display: none !important;
   }
 
+  /* Hide actual buttons but keep links styled as buttons */
+  button:not([class*="variant-"]), 
+  button[class*="download-pdf"],
+  .download-pdf-button {
+    display: none !important;
+  }
   
   main {
     padding: 0 !important;
     margin: 0 !important;
     width: 100% !important;
+    max-width: none !important;
   }
 
   
@@ -148,16 +159,273 @@
   }
 
   
-  .card, section {
+  .card, section, article, .avoid-break {
     break-inside: avoid;
     page-break-inside: avoid;
   }
 
+  h1, h2, h3, h4, h5, h6 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
   
-  body {
+  /* Ensure links are visible and underlined if text */
+  a {
+    text-decoration: none !important; /* Default reset */
+  }
+  
+  a:hover {
+    text-decoration: none !important;
+  }
+  
+  p a {
+    text-decoration: underline !important;
+    text-underline-offset: 2px;
+  }
+
+  /* Fix for Framer Motion and other animations hiding content during print */
+  [style*="opacity: 0"], 
+  [style*="opacity:0"],
+  [style*="transform"],
+  .motion-div,
+  div, section, span, p, h1, h2, h3, h4, h5, h6, li, ul, ol, table, tr, td, th {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Remove transparency from backgrounds */
+  [class*="bg-background/"],
+  [class*="bg-muted/"],
+  [class*="bg-card/"],
+  .backdrop-blur {
+    background-color: var(--background) !important;
+    backdrop-filter: none !important;
+  }
+  
+  /* Ensure card backgrounds are solid */
+  .card, .bg-card, [class*="bg-card"] {
+    background-color: var(--card) !important;
+  }
+
+  /* Ensure text is visible (Default/Light) */
+  body:not(.print-dark) p, 
+  body:not(.print-dark) h1, 
+  body:not(.print-dark) h2, 
+  body:not(.print-dark) h3, 
+  body:not(.print-dark) h4, 
+  body:not(.print-dark) h5, 
+  body:not(.print-dark) h6, 
+  body:not(.print-dark) li, 
+  body:not(.print-dark) td, 
+  body:not(.print-dark) th,
+  body:not(.print-dark) button,
+  body:not(.print-dark) .button,
+  body:not(.print-dark) a,
+  body:not(.print-dark) .badge,
+  body:not(.print-dark) span {
+    color: black !important;
+    -webkit-text-fill-color: black !important;
+    text-shadow: none !important;
+  }
+
+  /* Improve contrast for muted text in light mode */
+  body:not(.print-dark) .text-muted-foreground,
+  body:not(.print-dark) [class*="text-muted-foreground"] {
+    color: #404040 !important; /* Darker gray for better contrast (>7:1) */
+    -webkit-text-fill-color: #404040 !important;
+    opacity: 1 !important;
+  }
+
+  /* Specific fix for Buttons and Badges in Light Mode */
+  
+  /* Outline/Ghost/Secondary/Muted/White buttons - Force Black Text */
+  body:not(.print-dark) .bg-background,
+  body:not(.print-dark) .bg-secondary,
+  body:not(.print-dark) .bg-muted,
+  body:not(.print-dark) .bg-white,
+  body:not(.print-dark) [class*="variant-outline"],
+  body:not(.print-dark) [class*="variant-ghost"],
+  body:not(.print-dark) [class*="variant-secondary"] {
+    color: black !important;
+    -webkit-text-fill-color: black !important;
+  }
+
+  /* Primary Buttons/Badges (Dark Background) - Force White Text */
+  body:not(.print-dark) .bg-primary,
+  body:not(.print-dark) [class*="bg-primary"],
+  body:not(.print-dark) .badge.bg-primary,
+  body:not(.print-dark) button.bg-primary {
+    color: white !important;
+    -webkit-text-fill-color: white !important;
+  }
+  
+  /* Ensure icons in primary buttons are white */
+  body:not(.print-dark) .bg-primary svg,
+  body:not(.print-dark) [class*="bg-primary"] svg {
+    color: white !important;
+    stroke: white !important;
+  }
+
+  /* Ensure icons in outline/secondary buttons are black */
+  body:not(.print-dark) .bg-secondary svg,
+  body:not(.print-dark) [class*="variant-outline"] svg {
+    color: black !important;
+    stroke: black !important;
+  }
+  
+  /* Allow white text on primary background */
+  /* Handled above with more specificity */
+
+  /* Ensure icons in buttons are visible */
+  /* Handled above */
+
+  /* Force images to be visible and correctly sized */
+  img, svg {
+    display: block !important;
+    max-width: 100% !important;
+    break-inside: avoid !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  /* Force SVGs to be black by default in Light Mode Print */
+  body:not(.print-dark) svg {
+    color: black !important;
+    stroke: black !important;
+  }
+
+  /* Ensure relative containers for absolute images are respected */
+  .relative {
+    position: relative !important;
+  }
+
+  /* --- PRINT OPTIMIZATIONS --- */
+
+  /* Force 3-column layout for key sections to save space */
+  #numeri .grid,
+  #ecosistema .grid,
+  #portfolio .grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 1rem !important;
+  }
+
+  /* Compact Card Styling */
+  .card, [class*="border"] {
+    border: 1px solid #e5e5e5 !important;
+    box-shadow: none !important;
+    break-inside: avoid !important;
+  }
+
+  /* Reduce padding inside cards */
+  .card-header, .card-content, .card-footer, .p-6, .p-5 {
+    padding: 0.75rem !important;
+  }
+
+  /* Scale down large text */
+  .text-4xl, .text-5xl {
+    font-size: 1.75rem !important;
+    line-height: 1.2 !important;
+  }
+  
+  .text-3xl {
+    font-size: 1.5rem !important;
+  }
+
+  /* Hide decorative blobs and gradients to clean up the look */
+  .absolute[class*="bg-primary/"],
+  .absolute[class*="bg-purple-"],
+  .absolute[class*="bg-blue-"],
+  [class*="bg-gradient-"] {
+    display: none !important;
+  }
+  
+  /* Ensure charts are visible but compact */
+  .recharts-wrapper {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Reset background for readability and handle overflow (Light Mode Default) */
+  body:not(.print-dark),
+  body:not(.print-dark) .min-h-screen {
     font-size: 12pt;
     line-height: 1.5;
     color: black !important;
     background: white !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  /* Force light mode variables for printing to ensure contrast (Light Mode Default) */
+  html:not(.print-dark) :root,
+  html:not(.print-dark) .dark {
+    --background: #ffffff !important;
+    --foreground: #000000 !important;
+    --primary: #000000 !important;
+    --primary-foreground: #ffffff !important;
+    --muted-foreground: #666666 !important;
+    --card: #ffffff !important;
+    --card-foreground: #000000 !important;
+    --border: #e5e5e5 !important;
+  }
+
+  /* DARK MODE PRINT CONFIGURATION */
+  
+  /* Dark Mode Background & Text */
+  body.print-dark,
+  body.print-dark .min-h-screen {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: white !important;
+    background: #09090b !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  /* Dark Mode Variables */
+  html.print-dark .dark,
+  html.print-dark :root {
+    --background: #09090b !important;
+    --foreground: #ffffff !important;
+    --primary: #ffffff !important;
+    --primary-foreground: #000000 !important;
+    --muted-foreground: #d4d4d8 !important; /* Lighter gray for dark mode contrast */
+    --card: #18181b !important;
+    --card-foreground: #ffffff !important;
+    --border: #27272a !important;
+  }
+  
+  /* Ensure text is white in dark mode print */
+  body.print-dark p, 
+  body.print-dark h1, 
+  body.print-dark h2, 
+  body.print-dark h3, 
+  body.print-dark h4, 
+  body.print-dark h5, 
+  body.print-dark h6, 
+  body.print-dark li, 
+  body.print-dark td, 
+  body.print-dark th {
+    color: white !important;
+    -webkit-text-fill-color: white !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important; /* Improve readability on dark bg */
+  }
+
+  /* Ensure muted text is readable in dark mode */
+  body.print-dark .text-muted-foreground,
+  body.print-dark [class*="text-muted-foreground"] {
+    color: #d4d4d8 !important; /* Light gray */
+    -webkit-text-fill-color: #d4d4d8 !important;
+    opacity: 1 !important;
+  }
+  
+  /* Ensure cards in dark mode have solid background */
+  body.print-dark .card,
+  body.print-dark [class*="bg-card"] {
+    background-color: #18181b !important;
+    border: 1px solid #27272a !important;
   }
 }
