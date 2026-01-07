@@ -16,6 +16,8 @@ if (!API_KEY) {
   process.exit(1);
 }
 
+// --- Helpers ---
+
 async function yt(endpoint, params) {
   const url = new URL(`https://www.googleapis.com/youtube/v3/${endpoint}`);
   Object.entries({ key: API_KEY, ...params }).forEach(([k, v]) => {
@@ -30,6 +32,205 @@ async function yt(endpoint, params) {
   }
   return res.json();
 }
+
+function sum(arr) {
+  return arr.reduce((a, b) => a + b, 0);
+}
+
+function parseDuration(duration) {
+  const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+  if (!match) return 0;
+  const hours = parseInt(match[1]) || 0;
+  const minutes = parseInt(match[2]) || 0;
+  const seconds = parseInt(match[3]) || 0;
+  return hours * 60 + minutes + seconds / 60;
+}
+
+// --- Scrapers ---
+
+const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+
+async function fetchText(url) {
+  const res = await fetch(url, {
+    headers: {
+      "User-Agent": USER_AGENT,
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+      "Accept-Language": "en-US,en;q=0.9",
+      "Cache-Control": "max-age=0",
+      "Sec-Ch-Ua": '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+      "Sec-Ch-Ua-Mobile": "?0",
+      "Sec-Ch-Ua-Platform": '"Windows"',
+      "Sec-Fetch-Dest": "document",
+      "Sec-Fetch-Mode": "navigate",
+      "Sec-Fetch-Site": "none",
+      "Sec-Fetch-User": "?1",
+      "Upgrade-Insecure-Requests": "1"
+    }
+  });
+  if (!res.ok) throw new Error(`Status ${res.status}`);
+  return res.text();
+}
+
+function parseCount(raw) {
+  if (!raw) return null;
+  raw = raw.trim().toLowerCase();
+  let multiplier = 1;
+  if (raw.endsWith('k')) {
+    multiplier = 1000;
+    raw = raw.slice(0, -1);
+  } else if (raw.endsWith('m')) {
+    multiplier = 1000000;
+    raw = raw.slice(0, -1);
+  }
+  // Assume en-US format (comma = thousands, dot = decimal) because of request headers
+  // Remove commas completely
+  raw = raw.replace(/,/g, '');
+  // Clean up any non-numeric/non-dot chars (just in case)
+  raw = raw.replace(/[^\d\.]/g, '');
+  
+  const val = parseFloat(raw);
+  return Math.round(val * multiplier);
+}
+
+async function scrapeTelegram(url) {
+  try {
+    console.log(`[scraper] Fetching Telegram: ${url}`);
+    const text = await fetchText(url);
+    const match = text.match(/<div class="tgme_page_extra">\s*([\d\s\.,km]+)\s*(subscribers|members)\s*<\/div>/i);
+    if (match) return parseCount(match[1]);
+  } catch (e) {
+    console.warn(`[scraper] Telegram scrape failed: ${e.message}`);
+  }
+  return null;
+}
+
+async function scrapeInstagram(url) {
+  try {
+    console.log(`[scraper] Fetching Instagram: ${url}`);
+    const text = await fetchText(url);
+    // Try meta description first
+    let match = text.match(/<meta content="([^\"]+)" name="description"/i);
+    if (match) {
+      const content = match[1];
+      const statsMatch = content.match(/([\d\s\.,km]+)\s*Followers/i);
+      if (statsMatch) return parseCount(statsMatch[1]);
+    }
+    // Fallback: look for sharedData json
+    match = text.match(/<script type="text\/javascript">window\._sharedData\s*=\s*({.+?});<\/script>/);
+    if (match) {
+      const data = JSON.parse(match[1]);
+      const user = data?.entry_data?.ProfilePage?.[0]?.graphql?.user;
+      if (user?.edge_followed_by?.count) {
+        return user.edge_followed_by.count;
+      }
+    }
+  } catch (e) {
+    console.warn(`[scraper] Instagram scrape failed: ${e.message}`);
+  }
+  return null;
+}
+
+async function scrapeTikTok(url) {
+  try {
+    console.log(`[scraper] Fetching TikTok: ${url}`);
+    
+    // Extract username
+    const usernameMatch = url.match(/@([\w\.]+)/);
+    if (!usernameMatch) return null;
+    const username = usernameMatch[1];
+    
+    // Strategy 1: Embed Page (Most reliable for public stats without login)
+    // https://www.tiktok.com/embed/@ingeimaks
+    const embedUrl = `https://www.tiktok.com/embed/@${username}`;
+    try {
+      const text = await fetchText(embedUrl);
+      // Matches spans like: <span ... data-e2e="creator-profile-userInfo-TUXText">4513</span>
+      // Order is typically: Following, Followers, Likes
+      const regex = /<span[^>]*data-e2e="creator-profile-userInfo-TUXText"[^>]*>([\d\.,kKmM]+)<\/span>/g;
+      const matches = [...text.matchAll(regex)];
+      
+      if (matches.length >= 2) {
+        // Index 1 is Followers
+        const followerRaw = matches[1][1];
+        console.log(`[scraper] TikTok Embed found candidate: ${followerRaw}`);
+        const count = parseCount(followerRaw);
+        if (count > 0) return count;
+      }
+    } catch (e) {
+      console.warn(`[scraper] TikTok Embed failed: ${e.message}`);
+    }
+    
+    // Strategy 2: SIGI_STATE in main page (Fallback)
+    // ... (Old logic or new fallback if needed)
+    
+  } catch (e) {
+    console.warn(`[scraper] TikTok scrape failed: ${e.message}`);
+  }
+  return null;
+}
+
+async function scrapeFacebook(url) {
+  try {
+    console.log(`[scraper] Fetching Facebook: ${url}`);
+    
+    // Normalize URL to ensure www (Plugin often likes canonical URLs)
+    let canonicalUrl = url;
+    if (url.includes('facebook.com') && !url.includes('www.facebook.com')) {
+      canonicalUrl = url.replace('facebook.com', 'www.facebook.com');
+    }
+
+    // Strategy 1: Plugin Page (Public API loophole)
+    // We force the "page" plugin which usually reveals follower count
+    const pluginUrl = `https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(canonicalUrl)}&tabs&width=340&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId`;
+    
+    try {
+      const pluginText = await fetchText(pluginUrl);
+      // Find all numbers followed by "followers"
+      const matches = [...pluginText.matchAll(/([\d\s\.,km]+)\s*(followers|follower|mi piace|likes)/gi)];
+      
+      let maxCount = 0;
+      for (const m of matches) {
+        const val = parseCount(m[1]);
+        if (val > maxCount) maxCount = val;
+      }
+      
+      if (maxCount > 0) {
+        return maxCount;
+      }
+    } catch (e) {
+      console.warn(`[scraper] FB Plugin failed: ${e.message}`);
+    }
+
+    // Strategy 2: Direct Fetch (often blocked)
+    const text = await fetchText(url);
+    const match = text.match(/<meta name="description" content="[^"]*?([\d\s\.,km]+)\s*followers/i);
+    if (match) return parseCount(match[1]);
+    
+    const match2 = text.match(/([\d\s\.,km]+)\s*followers/i);
+    if (match2) return parseCount(match2[1]);
+  } catch (e) {
+    console.warn(`[scraper] Facebook scrape failed: ${e.message}`);
+  }
+  return null;
+}
+
+async function scrapePatreon(url) {
+  try {
+    console.log(`[scraper] Fetching Patreon: ${url}`);
+    const text = await fetchText(url);
+    const match = text.match(/([\d\s\.,km]+)\s*patrons/i);
+    if (match) return parseCount(match[1]);
+    
+    // Check for "members"
+    const match2 = text.match(/([\d\s\.,km]+)\s*members/i);
+    if (match2) return parseCount(match2[1]);
+  } catch (e) {
+    console.warn(`[scraper] Patreon scrape failed: ${e.message}`);
+  }
+  return null;
+}
+
+// --- Main Logic ---
 
 async function resolveChannelId() {
   const data = await yt("search", {
@@ -107,20 +308,84 @@ async function getVideosStats(ids) {
   return result;
 }
 
-function sum(arr) {
-  return arr.reduce((a, b) => a + b, 0);
+async function getExistingSocials() {
+  try {
+    const content = await fs.readFile("src/data/stats.ts", "utf8");
+    // Simple regex to extract the socials object
+    // Looking for: "socials": { ... }
+    const match = content.match(/"socials":\s*({[\s\S]*?})\n\s*};/);
+    if (match) {
+      // Need to be careful with JSON.parse on TS object string
+      // The current file uses standard JSON-like structure inside the TS variable
+      // But keys might not be quoted if it was written by hand. 
+      // The previous script wrote it with JSON.stringify, so it should be valid JSON.
+      return JSON.parse(match[1]);
+    }
+  } catch (e) {
+    console.warn("[update-stats] Could not read existing socials:", e.message);
+  }
+  // Default fallback
+  return {
+    instagram: { label: "Instagram", url: "https://instagram.com/ingeimaks", followers: 7549 },
+    facebook: { label: "Facebook", url: "https://facebook.com/ingeimaks", followers: 5579 },
+    telegram: { label: "Telegram", url: "https://t.me/ingeimaks", subscribers: 340 },
+    tiktok: { label: "TikTok", url: "https://tiktok.com/@ingeimaks", followers: 3337 },
+    patreon: { label: "Patreon", url: "https://patreon.com/ingeimaks", followers: 0 },
+  };
 }
 
-function parseDuration(duration) {
-  const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
-  if (!match) return 0;
-  const hours = parseInt(match[1]) || 0;
-  const minutes = parseInt(match[2]) || 0;
-  const seconds = parseInt(match[3]) || 0;
-  return hours * 60 + minutes + seconds / 60;
+async function updateSocials(currentSocials) {
+  const newSocials = { ...currentSocials };
+  
+  // Update Telegram
+  if (newSocials.telegram?.url) {
+    const tgSubs = await scrapeTelegram(newSocials.telegram.url);
+    if (tgSubs) {
+      console.log(`[update-stats] Updated Telegram subs: ${tgSubs}`);
+      newSocials.telegram.subscribers = tgSubs;
+    }
+  }
+
+  // Update Instagram
+  if (newSocials.instagram?.url) {
+    const igFollowers = await scrapeInstagram(newSocials.instagram.url);
+    if (igFollowers) {
+      console.log(`[update-stats] Updated Instagram followers: ${igFollowers}`);
+      newSocials.instagram.followers = igFollowers;
+    }
+  }
+
+  // Update Facebook
+  if (newSocials.facebook?.url) {
+    const fbFollowers = await scrapeFacebook(newSocials.facebook.url);
+    if (fbFollowers) {
+      console.log(`[update-stats] Updated Facebook followers: ${fbFollowers}`);
+      newSocials.facebook.followers = fbFollowers;
+    }
+  }
+
+  // Update TikTok
+  if (newSocials.tiktok?.url) {
+    const ttFollowers = await scrapeTikTok(newSocials.tiktok.url);
+    if (ttFollowers) {
+      console.log(`[update-stats] Updated TikTok followers: ${ttFollowers}`);
+      newSocials.tiktok.followers = ttFollowers;
+    }
+  }
+
+  // Update Patreon
+  if (newSocials.patreon?.url) {
+    const patreonFollowers = await scrapePatreon(newSocials.patreon.url);
+    if (patreonFollowers) {
+      console.log(`[update-stats] Updated Patreon followers: ${patreonFollowers}`);
+      newSocials.patreon.followers = patreonFollowers;
+    }
+  }
+  
+  return newSocials;
 }
 
-function computeStats(channel, videos) {
+function computeStats(channel, videos, socials) {
   const channelStats = channel.statistics || {};
   const snippet = channel.snippet || {};
   const now = new Date();
@@ -194,13 +459,7 @@ function computeStats(channel, videos) {
     engagementRatePct: Number(engagementRatePct.toFixed(2)),
     topVideos,
     avatarUrl,
-    socials: {
-      instagram: { label: "Instagram", url: "https://instagram.com/ingeimaks", followers: 7549 },
-      facebook: { label: "Facebook", url: "https://facebook.com/ingeimaks", followers: 5579 },
-      telegram: { label: "Telegram", url: "https://t.me/ingeimaks", subscribers: 340 },
-      tiktok: { label: "TikTok", url: "https://tiktok.com/@ingeimaks", followers: 3337 },
-      patreon: { label: "Patreon", url: "https://patreon.com/ingeimaks", followers: 0 },
-    },
+    socials,
   };
 }
 
@@ -247,15 +506,24 @@ async function main() {
   const ch = await getChannelInfo(channelId);
   const uploads = ch.contentDetails?.relatedPlaylists?.uploads;
   if (!uploads) throw new Error("Uploads playlist non trovata");
+  
   console.log("[update-stats] Scarico elenco video...");
   const ids = await getUploadsVideoIds(uploads);
   console.log(`[update-stats] Video raccolti: ${ids.length}`);
+  
   if (ids.length > 0) {
     console.log("Most recent video date:", ids[0].publishedAt);
   }
+  
   const vids = await getVideosStats(ids);
-  const computed = computeStats(ch, vids);
+
+  console.log("[update-stats] Aggiornamento social stats...");
+  const currentSocials = await getExistingSocials();
+  const updatedSocials = await updateSocials(currentSocials);
+
+  const computed = computeStats(ch, vids, updatedSocials);
   const out = toTsModule(computed);
+  
   await fs.writeFile("src/data/stats.ts", out, "utf8");
   console.log("[update-stats] stats.ts aggiornato");
 }
@@ -264,4 +532,3 @@ main().catch((err) => {
   console.error("[update-stats] Errore:", err.message);
   process.exit(1);
 });
-

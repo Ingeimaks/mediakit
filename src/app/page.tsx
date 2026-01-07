@@ -84,9 +84,9 @@ const staggerContainer = {
 
 export default function MediaKitPage() {
   const [isMounted, setIsMounted] = React.useState(false);
-  const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.9]);
+  const { scrollY } = useScroll();
+  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+  const scale = useTransform(scrollY, [0, 300], [1, 0.9]);
   const [activeSection, setActiveSection] = React.useState("");
   const [showScrollTop, setShowScrollTop] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);

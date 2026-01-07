@@ -115,7 +115,7 @@ export const it = {
     terms: "Termini e Condizioni",
   },
   stats: {
-    title: "Statistiche",
+    title: "Statistiche Youtube",
     verifiedData: "Dati verificati e aggiornati in tempo reale",
     avgViews: "Media Vis. per Video",
     recentAvgViews: "Media Vis. Recenti",
