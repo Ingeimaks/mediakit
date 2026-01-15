@@ -31,49 +31,49 @@ export type ChannelStats = {
 };
 
 export const stats: ChannelStats = {
-  "subscribers": 19600,
-  "totalViews": 5741622,
-  "videoCount": 269,
-  "monthlyViews": 92401,
-  "growth12mPct": 8261.3,
+  "subscribers": 19900,
+  "totalViews": 5974215,
+  "videoCount": 274,
+  "monthlyViews": 168533,
+  "growth12mPct": 9181.6,
   "watchTimeHours": 0,
-  "avgViewsPerVideo": 28535,
-  "recentAvgViews": 6615,
-  "uploadsPerMonth": 8.2,
+  "avgViewsPerVideo": 29221,
+  "recentAvgViews": 11169,
+  "uploadsPerMonth": 9,
   "avgDurationMinutes": 4,
-  "avgDurationReels": 41,
-  "avgDurationVideos": 804,
-  "engagementRatePct": 3.31,
+  "avgDurationReels": 43,
+  "avgDurationVideos": 797,
+  "engagementRatePct": 2.07,
   "topVideos": [
     {
       "title": "ADDIO LADRI Telecamera che NON si SCARICA MAI! 4G + WiFi + IA - Registrazione 7/24 ore",
       "url": "https://www.youtube.com/watch?v=CprOEynUTaQ",
-      "views": 94339
+      "views": 94379
     },
     {
       "title": "💣I 10 MIGLIORI PROGETTI ESP32 del 2025! 🚀",
       "url": "https://www.youtube.com/watch?v=A7Ou_TAT00s",
-      "views": 16067
+      "views": 16616
     },
     {
       "title": "❌ Raspberry Pi ADDIO? Arduino UNO Q con LINUX costa solo 44€! impossibile 😱",
       "url": "https://www.youtube.com/watch?v=VjV9N_F22MY",
-      "views": 13685
-    },
-    {
-      "title": "DA NAPOLI A ROMA IN BICI ELETTRICA : La Sfida su Due Ruote! [PARTE 1]",
-      "url": "https://www.youtube.com/watch?v=q_G7ZzVIxtc",
-      "views": 13117
+      "views": 14123
     },
     {
       "title": "ADDIO Alexa! Ho costruito il mio Assistente AI con ESP32 🚀 - PARTE 1",
       "url": "https://www.youtube.com/watch?v=nHq7fxmyhAo",
-      "views": 11685
+      "views": 13279
+    },
+    {
+      "title": "DA NAPOLI A ROMA IN BICI ELETTRICA : La Sfida su Due Ruote! [PARTE 1]",
+      "url": "https://www.youtube.com/watch?v=q_G7ZzVIxtc",
+      "views": 13141
     },
     {
       "title": "COME USARE UN SENSORE AD ULTRASUONI 🚀 #arduinouno #arduinolove #arduinotutorial #maker #arduino",
       "url": "https://www.youtube.com/watch?v=nX9OhEdjvP8",
-      "views": 10366
+      "views": 10817
     }
   ],
   "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_mLbavdK-jYX6Q-PKeU4nIcEOqMrFlHX7MA-XSkia9rEKQ=s800-c-k-c0x00ffffff-no-rj",
@@ -86,17 +86,17 @@ export const stats: ChannelStats = {
     "facebook": {
       "label": "Facebook",
       "url": "https://facebook.com/ingeimaks",
-      "followers": 8366
+      "followers": 8787
     },
     "telegram": {
       "label": "Telegram",
       "url": "https://t.me/ingeimaks",
-      "subscribers": 671
+      "subscribers": 783
     },
     "tiktok": {
       "label": "TikTok",
       "url": "https://tiktok.com/@ingeimaks",
-      "followers": 4513
+      "followers": 4714
     },
     "patreon": {
       "label": "Patreon",
