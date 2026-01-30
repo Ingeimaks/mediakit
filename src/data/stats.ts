@@ -31,8 +31,8 @@ export type ChannelStats = {
 };
 
 export const stats: ChannelStats = {
-  "subscribers": 19900,
-  "totalViews": 5974215,
+  "subscribers": 20800,
+  "totalViews": 6400000,
   "videoCount": 274,
   "monthlyViews": 168533,
   "growth12mPct": 9181.6,
@@ -76,27 +76,27 @@ export const stats: ChannelStats = {
       "views": 10817
     }
   ],
-  "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_mLbavdK-jYX6Q-PKeU4nIcEOqMrFlHX7MA-XSkia9rEKQ=s800-c-k-c0x00ffffff-no-rj",
+  "avatarUrl": "images/avatar.jpg",
   "socials": {
     "instagram": {
       "label": "Instagram",
       "url": "https://instagram.com/ingeimaks",
-      "followers": 12000
+      "followers": 16000
     },
     "facebook": {
       "label": "Facebook",
       "url": "https://facebook.com/ingeimaks",
-      "followers": 8787
+      "followers": 10642
     },
     "telegram": {
       "label": "Telegram",
       "url": "https://t.me/ingeimaks",
-      "subscribers": 783
+      "subscribers": 978
     },
     "tiktok": {
       "label": "TikTok",
       "url": "https://tiktok.com/@ingeimaks",
-      "followers": 4714
+      "followers": 4956
     },
     "patreon": {
       "label": "Patreon",
