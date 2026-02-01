@@ -31,52 +31,52 @@ export type ChannelStats = {
 };
 
 export const stats: ChannelStats = {
-  "subscribers": 20800,
-  "totalViews": 6400000,
-  "videoCount": 274,
-  "monthlyViews": 168533,
-  "growth12mPct": 9181.6,
+  "subscribers": 21000,
+  "totalViews": 6557024,
+  "videoCount": 285,
+  "monthlyViews": 143059,
+  "growth12mPct": 10455.1,
   "watchTimeHours": 0,
-  "avgViewsPerVideo": 29221,
-  "recentAvgViews": 11169,
-  "uploadsPerMonth": 9,
+  "avgViewsPerVideo": 30951,
+  "recentAvgViews": 2394,
+  "uploadsPerMonth": 10.8,
   "avgDurationMinutes": 4,
   "avgDurationReels": 43,
-  "avgDurationVideos": 797,
-  "engagementRatePct": 2.07,
+  "avgDurationVideos": 783,
+  "engagementRatePct": 1.77,
   "topVideos": [
     {
       "title": "ADDIO LADRI Telecamera che NON si SCARICA MAI! 4G + WiFi + IA - Registrazione 7/24 ore",
       "url": "https://www.youtube.com/watch?v=CprOEynUTaQ",
-      "views": 94379
+      "views": 94461
     },
     {
       "title": "💣I 10 MIGLIORI PROGETTI ESP32 del 2025! 🚀",
       "url": "https://www.youtube.com/watch?v=A7Ou_TAT00s",
-      "views": 16616
+      "views": 17354
     },
     {
       "title": "❌ Raspberry Pi ADDIO? Arduino UNO Q con LINUX costa solo 44€! impossibile 😱",
       "url": "https://www.youtube.com/watch?v=VjV9N_F22MY",
-      "views": 14123
+      "views": 15318
     },
     {
       "title": "ADDIO Alexa! Ho costruito il mio Assistente AI con ESP32 🚀 - PARTE 1",
       "url": "https://www.youtube.com/watch?v=nHq7fxmyhAo",
-      "views": 13279
+      "views": 14677
     },
     {
       "title": "DA NAPOLI A ROMA IN BICI ELETTRICA : La Sfida su Due Ruote! [PARTE 1]",
       "url": "https://www.youtube.com/watch?v=q_G7ZzVIxtc",
-      "views": 13141
+      "views": 13190
     },
     {
       "title": "COME USARE UN SENSORE AD ULTRASUONI 🚀 #arduinouno #arduinolove #arduinotutorial #maker #arduino",
       "url": "https://www.youtube.com/watch?v=nX9OhEdjvP8",
-      "views": 10817
+      "views": 11517
     }
   ],
-  "avatarUrl": "images/avatar.jpg",
+  "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_mLbavdK-jYX6Q-PKeU4nIcEOqMrFlHX7MA-XSkia9rEKQ=s800-c-k-c0x00ffffff-no-rj",
   "socials": {
     "instagram": {
       "label": "Instagram",
@@ -86,17 +86,17 @@ export const stats: ChannelStats = {
     "facebook": {
       "label": "Facebook",
       "url": "https://facebook.com/ingeimaks",
-      "followers": 10642
+      "followers": 10761
     },
     "telegram": {
       "label": "Telegram",
       "url": "https://t.me/ingeimaks",
-      "subscribers": 978
+      "subscribers": 1010
     },
     "tiktok": {
       "label": "TikTok",
       "url": "https://tiktok.com/@ingeimaks",
-      "followers": 4956
+      "followers": 4954
     },
     "patreon": {
       "label": "Patreon",
