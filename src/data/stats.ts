@@ -31,49 +31,49 @@ export type ChannelStats = {
 };
 
 export const stats: ChannelStats = {
-  "subscribers": 23100,
-  "totalViews": 8575672,
-  "videoCount": 302,
-  "monthlyViews": 122394,
-  "growth12mPct": 13677,
+  "subscribers": 23800,
+  "totalViews": 9523708,
+  "videoCount": 311,
+  "monthlyViews": 47836,
+  "growth12mPct": 11315.7,
   "watchTimeHours": 0,
-  "avgViewsPerVideo": 38659,
-  "recentAvgViews": 2204,
-  "uploadsPerMonth": 13.3,
+  "avgViewsPerVideo": 42050,
+  "recentAvgViews": 1989,
+  "uploadsPerMonth": 14.7,
   "avgDurationMinutes": 4,
   "avgDurationReels": 44,
-  "avgDurationVideos": 734,
-  "engagementRatePct": 1.91,
+  "avgDurationVideos": 701,
+  "engagementRatePct": 3.88,
   "topVideos": [
-    {
-      "title": "ADDIO LADRI Telecamera che NON si SCARICA MAI! 4G + WiFi + IA - Registrazione 7/24 ore",
-      "url": "https://www.youtube.com/watch?v=CprOEynUTaQ",
-      "views": 94555
-    },
     {
       "title": "La Sedia Ergonomica DEFINITIVA? 😴 Recensione Hbada E3 Pro",
       "url": "https://www.youtube.com/watch?v=k7ymCx0iqQY",
-      "views": 67044
+      "views": 116546
     },
     {
-      "title": "💣I 10 MIGLIORI PROGETTI ESP32 del 2025! 🚀",
-      "url": "https://www.youtube.com/watch?v=A7Ou_TAT00s",
-      "views": 18676
+      "title": "ADDIO LADRI Telecamera che NON si SCARICA MAI! 4G + WiFi + IA - Registrazione 7/24 ore",
+      "url": "https://www.youtube.com/watch?v=CprOEynUTaQ",
+      "views": 94596
     },
     {
       "title": "❌ Raspberry Pi ADDIO? Arduino UNO Q con LINUX costa solo 44€! impossibile 😱",
       "url": "https://www.youtube.com/watch?v=VjV9N_F22MY",
-      "views": 17585
+      "views": 22510
+    },
+    {
+      "title": "💣I 10 MIGLIORI PROGETTI ESP32 del 2025! 🚀",
+      "url": "https://www.youtube.com/watch?v=A7Ou_TAT00s",
+      "views": 19299
     },
     {
       "title": "ADDIO Alexa! Ho costruito il mio Assistente AI con ESP32 🚀 - PARTE 1",
       "url": "https://www.youtube.com/watch?v=nHq7fxmyhAo",
-      "views": 16557
+      "views": 17399
     },
     {
       "title": "DA NAPOLI A ROMA IN BICI ELETTRICA : La Sfida su Due Ruote! [PARTE 1]",
       "url": "https://www.youtube.com/watch?v=q_G7ZzVIxtc",
-      "views": 13254
+      "views": 13288
     }
   ],
   "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_mLbavdK-jYX6Q-PKeU4nIcEOqMrFlHX7MA-XSkia9rEKQ=s800-c-k-c0x00ffffff-no-rj",
@@ -86,17 +86,17 @@ export const stats: ChannelStats = {
     "facebook": {
       "label": "Facebook",
       "url": "https://facebook.com/ingeimaks",
-      "followers": 15872
+      "followers": 17831
     },
     "telegram": {
       "label": "Telegram",
       "url": "https://t.me/ingeimaks",
-      "subscribers": 1513
+      "subscribers": 1733
     },
     "tiktok": {
       "label": "TikTok",
       "url": "https://tiktok.com/@ingeimaks",
-      "followers": 5153
+      "followers": 5238
     },
     "patreon": {
       "label": "Patreon",
