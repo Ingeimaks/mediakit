@@ -484,6 +484,14 @@ export type SocialStats = {
   subscribers?: number;
 };
 
+export type AudienceStats = {
+  malePct: number;
+  age1834Pct: number;
+  italyPct: number;
+  switzerlandPct: number;
+  otherPct: number;
+};
+
 export type ChannelStats = {
   subscribers: number;
   totalViews: number;
@@ -501,6 +509,7 @@ export type ChannelStats = {
   topVideos: TopVideo[];
   avatarUrl: string;
   socials: Record<string, SocialStats>;
+  audience: AudienceStats;
 };
 
 export const stats: ChannelStats = ${JSON.stringify(data, null, 2)};
