@@ -386,6 +386,15 @@ export default function MediaKitPage() {
                 {t.common.youtubeChannel}
               </Link>
             </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              className="rounded-full text-lg h-12 px-8 border-2 hover:bg-accent/50 transition-all hover:-translate-y-1"
+              onClick={() => window.print()}
+            >
+              <Download className="mr-2 h-5 w-5" />
+              {t.common.downloadPdf}
+            </Button>
           </motion.div>
         </motion.section>
 
@@ -695,8 +704,8 @@ export default function MediaKitPage() {
               </CardHeader>
               <CardContent className="space-y-8">
                 {[
-                  { label: t.audience.male, val: 94, color: "bg-blue-500" },
-                  { label: `${t.audience.age} 18-34`, val: 65, color: "bg-primary" },
+                  { label: t.audience.male, val: stats.audience.malePct, color: "bg-blue-500" },
+                  { label: `${t.audience.age} 18-34`, val: stats.audience.age1834Pct, color: "bg-primary" },
                   { label: t.audience.interests, val: 100, color: "bg-green-500" },
                 ].map((item, i) => (
                   <div key={i} className="space-y-2">
@@ -742,9 +751,9 @@ export default function MediaKitPage() {
                   </TableHeader>
                   <TableBody>
                     {[
-                      { c: t.common.italy, p: "92%" },
-                      { c: t.common.switzerland, p: "3%" },
-                      { c: t.common.other, p: "5%" },
+                      { c: t.common.italy, p: `${stats.audience.italyPct}%` },
+                      { c: t.common.switzerland, p: `${stats.audience.switzerlandPct}%` },
+                      { c: t.common.other, p: `${stats.audience.otherPct}%` },
                     ].map((row, i) => (
                       <TableRow key={i} className="hover:bg-muted/50">
                         <TableCell className="font-medium text-lg">
@@ -915,21 +924,24 @@ export default function MediaKitPage() {
               {
                 title: t.services.review.title,
                 desc: t.services.review.desc,
+                subject: "Collaborazione+Recensione+Prodotto",
               },
               {
                 title: t.services.sponsored.title,
                 desc: t.services.sponsored.desc,
+                subject: "Collaborazione+Video+Sponsorizzato",
                 highlight: true,
               },
               {
                 title: t.services.shorts.title,
                 desc: t.services.shorts.desc,
+                subject: "Collaborazione+Shorts+%26+Reels",
               },
             ].map((service, idx) => (
               <Card
                 key={idx}
                 className={cn(
-                  "bg-background/80 backdrop-blur transition-all duration-300 hover:-translate-y-2 hover:shadow-xl",
+                  "bg-background/80 backdrop-blur transition-all duration-300 hover:-translate-y-2 hover:shadow-xl flex flex-col",
                   service.highlight
                     ? "border-primary shadow-lg shadow-primary/10 scale-105 z-10"
                     : "border-border"
@@ -942,11 +954,19 @@ export default function MediaKitPage() {
                     </CardTitle>
                   </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex-1">
                   <p className="text-muted-foreground leading-relaxed">
                     {service.desc}
                   </p>
                 </CardContent>
+                <CardFooter>
+                  <Button asChild variant={service.highlight ? "default" : "outline"} className="w-full gap-2">
+                    <Link href={`mailto:info@ingeimaks.it?subject=${service.subject}`}>
+                      <Mail className="h-4 w-4" />
+                      {t.services.cta}
+                    </Link>
+                  </Button>
+                </CardFooter>
               </Card>
             ))}
           </div>

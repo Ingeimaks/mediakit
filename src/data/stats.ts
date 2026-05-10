@@ -11,6 +11,14 @@ export type SocialStats = {
   subscribers?: number;
 };
 
+export type AudienceStats = {
+  malePct: number;
+  age1834Pct: number;
+  italyPct: number;
+  switzerlandPct: number;
+  otherPct: number;
+};
+
 export type ChannelStats = {
   subscribers: number;
   totalViews: number;
@@ -28,6 +36,7 @@ export type ChannelStats = {
   topVideos: TopVideo[];
   avatarUrl: string;
   socials: Record<string, SocialStats>;
+  audience: AudienceStats;
 };
 
 export const stats: ChannelStats = {
@@ -77,11 +86,18 @@ export const stats: ChannelStats = {
     }
   ],
   "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_mLbavdK-jYX6Q-PKeU4nIcEOqMrFlHX7MA-XSkia9rEKQ=s800-c-k-c0x00ffffff-no-rj",
+  "audience": {
+    "malePct": 94,
+    "age1834Pct": 65,
+    "italyPct": 92,
+    "switzerlandPct": 3,
+    "otherPct": 5
+  },
   "socials": {
     "instagram": {
       "label": "Instagram",
       "url": "https://instagram.com/ingeimaks",
-      "followers": 16000
+      "followers": 26700
     },
     "facebook": {
       "label": "Facebook",

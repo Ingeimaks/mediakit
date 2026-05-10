@@ -93,6 +93,7 @@ export const it = {
       title: "Shorts & Reels",
       desc: "Contenuti brevi e verticali ad alto impatto virale.",
     },
+    cta: "Richiedi info",
   },
   portfolio: {
     title: "Portfolio & Collaborazioni",

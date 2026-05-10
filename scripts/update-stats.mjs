@@ -460,6 +460,13 @@ function computeStats(channel, videos, socials) {
     topVideos,
     avatarUrl,
     socials,
+    audience: {
+      malePct: 94,
+      age1834Pct: 65,
+      italyPct: 92,
+      switzerlandPct: 3,
+      otherPct: 5,
+    },
   };
 }
 
