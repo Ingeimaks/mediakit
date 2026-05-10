@@ -12,8 +12,8 @@ const API_KEY = process.env.YOUTUBE_API_KEY;
 const QUERY = "ingeimaks"; // handle/canale da cercare
 
 if (!API_KEY) {
-  console.error("[update-stats] Variabile YOUTUBE_API_KEY mancante.");
-  process.exit(1);
+  console.warn("[update-stats] Variabile YOUTUBE_API_KEY mancante — skip aggiornamento stats.");
+  process.exit(0);
 }
 
 // --- Helpers ---
