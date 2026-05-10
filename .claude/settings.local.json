@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Select-Object -First 40 FullName)",
+      "WebSearch",
+      "WebFetch(domain:socialblade.com)",
+      "WebFetch(domain:www.youtube.com)",
+      "WebFetch(domain:www.instagram.com)"
+    ]
+  }
+}
