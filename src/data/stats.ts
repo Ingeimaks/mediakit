@@ -40,84 +40,84 @@ export type ChannelStats = {
 };
 
 export const stats: ChannelStats = {
-  "subscribers": 27300,
-  "totalViews": 13534865,
-  "videoCount": 328,
-  "monthlyViews": 80812,
-  "growth12mPct": 8630.9,
+  "subscribers": 28800,
+  "totalViews": 14640327,
+  "videoCount": 329,
+  "monthlyViews": 54404,
+  "growth12mPct": 8887.8,
   "watchTimeHours": 0,
-  "avgViewsPerVideo": 57207,
-  "recentAvgViews": 7456,
-  "uploadsPerMonth": 16.8,
+  "avgViewsPerVideo": 62494,
+  "recentAvgViews": 10554,
+  "uploadsPerMonth": 15.5,
   "avgDurationMinutes": 4,
-  "avgDurationReels": 46,
+  "avgDurationReels": 47,
   "avgDurationVideos": 666,
-  "engagementRatePct": 2.88,
+  "engagementRatePct": 2.82,
   "topVideos": [
     {
       "title": "La Sedia Ergonomica DEFINITIVA? 😴 Recensione Hbada E3 Pro",
       "url": "https://www.youtube.com/watch?v=k7ymCx0iqQY",
-      "views": 122448
+      "views": 122535
     },
     {
       "title": "ADDIO LADRI Telecamera che NON si SCARICA MAI! 4G + WiFi + IA - Registrazione 7/24 ore",
       "url": "https://www.youtube.com/watch?v=CprOEynUTaQ",
-      "views": 94743
+      "views": 94783
     },
     {
       "title": "❌ Raspberry Pi ADDIO? Arduino UNO Q con LINUX costa solo 44€! impossibile 😱",
       "url": "https://www.youtube.com/watch?v=VjV9N_F22MY",
-      "views": 27302
+      "views": 28428
     },
     {
       "title": "💣I 10 MIGLIORI PROGETTI ESP32 del 2025! 🚀",
       "url": "https://www.youtube.com/watch?v=A7Ou_TAT00s",
-      "views": 21174
+      "views": 21646
     },
     {
       "title": "ADDIO Alexa! Ho costruito il mio Assistente AI con ESP32 🚀 - PARTE 1",
       "url": "https://www.youtube.com/watch?v=nHq7fxmyhAo",
-      "views": 19688
+      "views": 20117
     },
     {
       "title": "COME USARE UN SENSORE AD ULTRASUONI 🚀 #arduinouno #arduinolove #arduinotutorial #maker #arduino",
       "url": "https://www.youtube.com/watch?v=nX9OhEdjvP8",
-      "views": 13950
+      "views": 13992
     }
   ],
   "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_mLbavdK-jYX6Q-PKeU4nIcEOqMrFlHX7MA-XSkia9rEKQ=s800-c-k-c0x00ffffff-no-rj",
-  "audience": {
-    "malePct": 94,
-    "age1834Pct": 65,
-    "italyPct": 92,
-    "switzerlandPct": 3,
-    "otherPct": 5
-  },
   "socials": {
     "instagram": {
       "label": "Instagram",
       "url": "https://instagram.com/ingeimaks",
-      "followers": 26700
+      "followers": 27000
     },
     "facebook": {
       "label": "Facebook",
       "url": "https://facebook.com/ingeimaks",
-      "followers": 22962
+      "followers": 24308
     },
     "telegram": {
       "label": "Telegram",
       "url": "https://t.me/ingeimaks",
-      "subscribers": 3078
+      "subscribers": 3322
     },
     "tiktok": {
       "label": "TikTok",
       "url": "https://tiktok.com/@ingeimaks",
-      "followers": 5990
+      "followers": 6707
     },
     "patreon": {
       "label": "Patreon",
       "url": "https://patreon.com/ingeimaks",
       "followers": 0
     }
+  },
+  "audience": {
+    "malePct": 94,
+    "age1834Pct": 65,
+    "italyPct": 92,
+    "switzerlandPct": 3,
+    "otherPct": 5
   }
 };
