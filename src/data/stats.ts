@@ -40,49 +40,49 @@ export type ChannelStats = {
 };
 
 export const stats: ChannelStats = {
-  "subscribers": 28800,
-  "totalViews": 14640327,
-  "videoCount": 329,
-  "monthlyViews": 54404,
-  "growth12mPct": 8887.8,
+  "subscribers": 29300,
+  "totalViews": 15137932,
+  "videoCount": 333,
+  "monthlyViews": 44256,
+  "growth12mPct": 8271,
   "watchTimeHours": 0,
-  "avgViewsPerVideo": 62494,
-  "recentAvgViews": 10554,
-  "uploadsPerMonth": 15.5,
+  "avgViewsPerVideo": 63260,
+  "recentAvgViews": 7096,
+  "uploadsPerMonth": 14,
   "avgDurationMinutes": 4,
   "avgDurationReels": 47,
-  "avgDurationVideos": 666,
-  "engagementRatePct": 2.82,
+  "avgDurationVideos": 659,
+  "engagementRatePct": 2.75,
   "topVideos": [
     {
       "title": "La Sedia Ergonomica DEFINITIVA? 😴 Recensione Hbada E3 Pro",
       "url": "https://www.youtube.com/watch?v=k7ymCx0iqQY",
-      "views": 122535
+      "views": 122675
     },
     {
       "title": "ADDIO LADRI Telecamera che NON si SCARICA MAI! 4G + WiFi + IA - Registrazione 7/24 ore",
       "url": "https://www.youtube.com/watch?v=CprOEynUTaQ",
-      "views": 94783
+      "views": 94832
     },
     {
       "title": "❌ Raspberry Pi ADDIO? Arduino UNO Q con LINUX costa solo 44€! impossibile 😱",
       "url": "https://www.youtube.com/watch?v=VjV9N_F22MY",
-      "views": 28428
+      "views": 29109
     },
     {
       "title": "💣I 10 MIGLIORI PROGETTI ESP32 del 2025! 🚀",
       "url": "https://www.youtube.com/watch?v=A7Ou_TAT00s",
-      "views": 21646
+      "views": 22157
     },
     {
       "title": "ADDIO Alexa! Ho costruito il mio Assistente AI con ESP32 🚀 - PARTE 1",
       "url": "https://www.youtube.com/watch?v=nHq7fxmyhAo",
-      "views": 20117
+      "views": 20655
     },
     {
       "title": "COME USARE UN SENSORE AD ULTRASUONI 🚀 #arduinouno #arduinolove #arduinotutorial #maker #arduino",
       "url": "https://www.youtube.com/watch?v=nX9OhEdjvP8",
-      "views": 13992
+      "views": 14016
     }
   ],
   "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_mLbavdK-jYX6Q-PKeU4nIcEOqMrFlHX7MA-XSkia9rEKQ=s800-c-k-c0x00ffffff-no-rj",
@@ -90,22 +90,22 @@ export const stats: ChannelStats = {
     "instagram": {
       "label": "Instagram",
       "url": "https://instagram.com/ingeimaks",
-      "followers": 27000
+      "followers": 7549
     },
     "facebook": {
       "label": "Facebook",
       "url": "https://facebook.com/ingeimaks",
-      "followers": 24308
+      "followers": 24879
     },
     "telegram": {
       "label": "Telegram",
       "url": "https://t.me/ingeimaks",
-      "subscribers": 3322
+      "subscribers": 3466
     },
     "tiktok": {
       "label": "TikTok",
       "url": "https://tiktok.com/@ingeimaks",
-      "followers": 6707
+      "followers": 6969
     },
     "patreon": {
       "label": "Patreon",
