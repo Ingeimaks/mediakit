@@ -1,6 +1,5 @@
 import type { NextConfig } from "next";
-
-const repoName = "mediakit";
+import { repoName } from "./src/lib/config";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,

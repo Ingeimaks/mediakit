@@ -342,12 +342,6 @@
     display: none !important;
   }
   
-  /* Ensure charts are visible but compact */
-  .recharts-wrapper {
-    width: 100% !important;
-    height: auto !important;
-  }
-
   /* Reset background for readability and handle overflow (Light Mode Default) */
   body:not(.print-dark),
   body:not(.print-dark) .min-h-screen {

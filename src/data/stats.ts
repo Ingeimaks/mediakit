@@ -35,7 +35,6 @@ export type ChannelStats = {
   engagementRatePct: number;
   topVideos: TopVideo[];
   avatarUrl: string;
-  socials: Record<string, SocialStats>;
   audience: AudienceStats;
 };
 
@@ -86,33 +85,6 @@ export const stats: ChannelStats = {
     }
   ],
   "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_mLbavdK-jYX6Q-PKeU4nIcEOqMrFlHX7MA-XSkia9rEKQ=s800-c-k-c0x00ffffff-no-rj",
-  "socials": {
-    "instagram": {
-      "label": "Instagram",
-      "url": "https://instagram.com/ingeimaks",
-      "followers": 7549
-    },
-    "facebook": {
-      "label": "Facebook",
-      "url": "https://facebook.com/ingeimaks",
-      "followers": 25860
-    },
-    "telegram": {
-      "label": "Telegram",
-      "url": "https://t.me/ingeimaks",
-      "subscribers": 3494
-    },
-    "tiktok": {
-      "label": "TikTok",
-      "url": "https://tiktok.com/@ingeimaks",
-      "followers": 7586
-    },
-    "patreon": {
-      "label": "Patreon",
-      "url": "https://patreon.com/ingeimaks",
-      "followers": 0
-    }
-  },
   "audience": {
     "malePct": 94,
     "age1834Pct": 65,

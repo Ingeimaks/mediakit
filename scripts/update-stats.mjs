@@ -310,15 +310,11 @@ async function getVideosStats(ids) {
 
 async function getExistingSocials() {
   try {
-    const content = await fs.readFile("src/data/stats.ts", "utf8");
-    // Simple regex to extract the socials object
-    // Looking for: "socials": { ... }
-    const match = content.match(/"socials":\s*({[\s\S]*?})\n\s*};/);
+    const content = await fs.readFile("src/data/socials.ts", "utf8");
+    // Il file è generato da questo script con JSON.stringify, quindi l'oggetto è JSON valido.
+    // Estrai l'ultimo oggetto `{...}` prima del `;` finale.
+    const match = content.match(/=\s*(\{[\s\S]*\})\s*;\s*$/);
     if (match) {
-      // Need to be careful with JSON.parse on TS object string
-      // The current file uses standard JSON-like structure inside the TS variable
-      // But keys might not be quoted if it was written by hand. 
-      // The previous script wrote it with JSON.stringify, so it should be valid JSON.
       return JSON.parse(match[1]);
     }
   } catch (e) {
@@ -508,11 +504,19 @@ export type ChannelStats = {
   engagementRatePct: number;
   topVideos: TopVideo[];
   avatarUrl: string;
-  socials: Record<string, SocialStats>;
   audience: AudienceStats;
 };
 
 export const stats: ChannelStats = ${JSON.stringify(data, null, 2)};
+`;
+}
+
+function toSocialsModule(socials) {
+  return `// Dati social generati da scripts/update-stats.mjs.
+// Le URL e i label sono la fonte di verità; i conteggi vengono aggiornati dallo script.
+import type { SocialStats } from "@/data/stats";
+
+export const socials: Record<string, SocialStats> = ${JSON.stringify(socials, null, 2)};
 `;
 }
 
@@ -538,10 +542,13 @@ async function main() {
   const updatedSocials = await updateSocials(currentSocials);
 
   const computed = computeStats(ch, vids, updatedSocials);
-  const out = toTsModule(computed);
-  
-  await fs.writeFile("src/data/stats.ts", out, "utf8");
+  const { socials, ...statsOnly } = computed;
+
+  await fs.writeFile("src/data/stats.ts", toTsModule(statsOnly), "utf8");
   console.log("[update-stats] stats.ts aggiornato");
+
+  await fs.writeFile("src/data/socials.ts", toSocialsModule(socials), "utf8");
+  console.log("[update-stats] socials.ts aggiornato");
 }
 
 main().catch((err) => {

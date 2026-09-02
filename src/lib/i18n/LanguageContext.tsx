@@ -16,14 +16,14 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>("it");
-
-  useEffect(() => {
-    const savedLang = localStorage.getItem("language") as Language;
-    if (savedLang && (savedLang === "it" || savedLang === "en")) {
-      setLanguage(savedLang);
+  // Lettura sincrona di localStorage nell'initializer (evita il flash di lingua sbagliata).
+  const [language, setLanguage] = useState<Language>(() => {
+    if (typeof window !== "undefined") {
+      const saved = window.localStorage.getItem("language");
+      if (saved === "it" || saved === "en") return saved;
     }
-  }, []);
+    return "it";
+  });
 
   const t = language === "it" ? it : en;
 

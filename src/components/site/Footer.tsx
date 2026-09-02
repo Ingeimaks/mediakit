@@ -1,20 +1,23 @@
+"use client";
+
 import Link from "next/link";
-import { Github, Youtube, Instagram } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export function Footer() {
+  const { t } = useLanguage();
+
   return (
-    <footer className="border-t border-[var(--border)] print:hidden">
-      <div className="container flex flex-col md:flex-row items-center justify-between py-8 gap-4">
-        <p className="muted">© {new Date().getFullYear()} INGEIMAKS • Giovanni Mannara</p>
-        <div className="flex items-center gap-4">
-          <Link href="https://github.com/" target="_blank" aria-label="GitHub" className="hover:text-[var(--primary)]">
-            <Github />
+    <footer className="py-12 border-t bg-muted/30 text-center text-sm text-muted-foreground">
+      <div className="w-full px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p>
+          © {new Date().getFullYear()} Giovanni Mannara (Ingeimaks). {t.footer.rights}.
+        </p>
+        <div className="flex gap-6">
+          <Link href="/privacy" className="hover:text-primary transition-colors">
+            {t.footer.privacy}
           </Link>
-          <Link href="https://www.youtube.com/@ingeimaks" target="_blank" aria-label="YouTube" className="hover:text-[var(--primary)]">
-            <Youtube />
-          </Link>
-          <Link href="https://www.instagram.com/ingeimaks" target="_blank" aria-label="Instagram" className="hover:text-[var(--primary)]">
-            <Instagram />
+          <Link href="/termini" className="hover:text-primary transition-colors">
+            {t.footer.terms}
           </Link>
         </div>
       </div>
