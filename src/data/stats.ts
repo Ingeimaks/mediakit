@@ -39,49 +39,49 @@ export type ChannelStats = {
 };
 
 export const stats: ChannelStats = {
-  "subscribers": 33400,
-  "totalViews": 19758322,
+  "subscribers": 34000,
+  "totalViews": 20357607,
   "videoCount": 360,
-  "monthlyViews": 5451,
-  "growth12mPct": 6863.7,
+  "monthlyViews": 0,
+  "growth12mPct": 7427.3,
   "watchTimeHours": 0,
-  "avgViewsPerVideo": 75518,
-  "recentAvgViews": 1710,
-  "uploadsPerMonth": 6.8,
+  "avgViewsPerVideo": 77835,
+  "recentAvgViews": 1834,
+  "uploadsPerMonth": 5.7,
   "avgDurationMinutes": 4,
   "avgDurationReels": 48,
   "avgDurationVideos": 672,
-  "engagementRatePct": 2.09,
+  "engagementRatePct": 2.04,
   "topVideos": [
     {
       "title": "La Sedia Ergonomica DEFINITIVA? 😴 Recensione Hbada E3 Pro",
       "url": "https://www.youtube.com/watch?v=k7ymCx0iqQY",
-      "views": 123744
+      "views": 123872
     },
     {
       "title": "ADDIO LADRI Telecamera che NON si SCARICA MAI! 4G + WiFi + IA - Registrazione 7/24 ore",
       "url": "https://www.youtube.com/watch?v=CprOEynUTaQ",
-      "views": 94995
+      "views": 95002
     },
     {
       "title": "❌ Raspberry Pi ADDIO? Arduino UNO Q con LINUX costa solo 44€! impossibile 😱",
       "url": "https://www.youtube.com/watch?v=VjV9N_F22MY",
-      "views": 33798
+      "views": 34336
     },
     {
       "title": "💣I 10 MIGLIORI PROGETTI ESP32 del 2025! 🚀",
       "url": "https://www.youtube.com/watch?v=A7Ou_TAT00s",
-      "views": 26703
+      "views": 27546
     },
     {
       "title": "ADDIO Alexa! Ho costruito il mio Assistente AI con ESP32 🚀 - PARTE 1",
       "url": "https://www.youtube.com/watch?v=nHq7fxmyhAo",
-      "views": 25477
+      "views": 26375
     },
     {
       "title": "DA NAPOLI A ROMA IN BICI ELETTRICA : La Sfida su Due Ruote! [PARTE 1]",
       "url": "https://www.youtube.com/watch?v=q_G7ZzVIxtc",
-      "views": 14264
+      "views": 14499
     }
   ],
   "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_mLbavdK-jYX6Q-PKeU4nIcEOqMrFlHX7MA-XSkia9rEKQ=s800-c-k-c0x00ffffff-no-rj",
